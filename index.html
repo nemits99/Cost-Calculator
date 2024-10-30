@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Biaya Produksi</title>
+    <link rel="manifest" href="manifest.json">
     <style>
-         body {
+      body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0px;
             background-color: #f4f4f4;
         }
 
         .container {
+            padding-top: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,7 +21,7 @@
             background-color: #f0f2f5;
         }
 
-        /* Desain dasar card */
+
         .card {
             background-color: #fff;
             border-radius: 8px;
@@ -28,7 +30,7 @@
             padding: 20px;
             text-align: left;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-top: 80px;
+            margin-top: 0px;
         }
 
         /* Efek hover untuk card */
@@ -76,7 +78,7 @@
         button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #0080ff;
+            background-color: #00b700;
             color: white;
             border: none;
             border-radius: 5px;
@@ -84,13 +86,19 @@
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #0058b0;
+            background-color: #007900;
         }
 
         /* Hasil TextBox */
         input[readonly] {
+            font-size: 20px;
+            font-weight: bold;
             background-color: #f1f1f1;
             color: #333;
+        }
+        li{
+            background-color: #0080ff;
+            color: #e6e600;
         }
     </style>
 </head>
@@ -98,14 +106,14 @@
     <div class="container">
         <div class="card">
             <h2>Production Cost Calculator</h2>
-            <li>by utility@trpc</li>
+            <li>By utility@trpc</li>
             <br>
             <div class="form-group">
-                <label for="bahanBaku">Biaya Bahan Baku Langsung (Rp):</label>
+                <label for="bahanBaku">Biaya Bahan Baku (Rp):</label>
                 <input type="number" id="bahanBaku" placeholder="Masukkan biaya bahan baku">
             </div>
             <div class="form-group">
-                <label for="tenagaKerja">Biaya Tenaga Kerja Langsung (Rp):</label>
+                <label for="tenagaKerja">Biaya Tenaga Kerja (Rp):</label>
                 <input type="number" id="tenagaKerja" placeholder="Masukkan biaya tenaga kerja">
             </div>
             <div class="form-group">
@@ -136,6 +144,14 @@
                 <label for="biayaPerUnit">Biaya Produksi per Unit (Rp):</label>
                 <input type="text" id="biayaPerUnit" readonly>
             </div>
+            <div class="form-group">
+                <label for="totalBiayaProduksiUSD">Total Biaya Produksi (USD):</label>
+                <input type="text" id="totalBiayaProduksiUSD" readonly>
+            </div>
+            <div class="form-group">
+                <label for="biayaPerUnitUSD">Biaya Produksi per Unit (USD):</label>
+                <input type="text" id="biayaPerUnitUSD" readonly>
+            </div>
         </div>
     </div>
 
@@ -149,6 +165,9 @@
             const overheadLain = parseFloat(document.getElementById("overheadLain").value) || 0;
             const jumlahUnit = parseFloat(document.getElementById("jumlahUnit").value) || 1;
 
+            // Nilai tukar Rupiah ke USD
+            const exchangeRate = 15000; // Contoh nilai tukar 1 USD = Rp15.000, sesuaikan dengan nilai yang diinginkan
+
             // Hitung biaya listrik
             const biayaListrik = kwh * tarifListrik;
 
@@ -158,9 +177,41 @@
             // Hitung biaya produksi per unit
             const biayaPerUnit = totalBiayaProduksi / jumlahUnit;
 
+            // Konversi total biaya produksi dan biaya per unit ke USD
+            const totalBiayaProduksiUSD = totalBiayaProduksi / exchangeRate;
+            const biayaPerUnitUSD = biayaPerUnit / exchangeRate;
+
+            // Formatter untuk Rupiah
+            const formatterIDR = new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                minimumFractionDigits: 0
+            });
+
+            // Formatter untuk USD
+            const formatterUSD = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 2
+            });
+
             // Tampilkan hasil dalam text box
-            document.getElementById("totalBiayaProduksi").value = `Rp ${totalBiayaProduksi.toLocaleString()}`;
-            document.getElementById("biayaPerUnit").value = `Rp ${biayaPerUnit.toLocaleString()}`;
+            document.getElementById("totalBiayaProduksi").value = formatterIDR.format(totalBiayaProduksi);
+            document.getElementById("biayaPerUnit").value = formatterIDR.format(biayaPerUnit);
+            document.getElementById("totalBiayaProduksiUSD").value = formatterUSD.format(totalBiayaProduksiUSD);
+            document.getElementById("biayaPerUnitUSD").value = formatterUSD.format(biayaPerUnitUSD);
+        }
+    </script>
+     <script>
+        // Daftar service worker
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("./service-worker.js")
+            .then((registration) => {
+                console.log("Service Worker terdaftar dengan sukses:", registration.scope);
+            })
+            .catch((error) => {
+                console.log("Service Worker pendaftaran gagal:", error);
+            });
         }
     </script>
 </body>
