@@ -1,6 +1,6 @@
 {
     "name": "Kalkulator Biaya Produksi",
-    "short_name": "Kalkulator Produksi",
+    "short_name": "Cost Calculator",
     "description": "Kalkulator untuk menghitung biaya produksi per unit.",
     "start_url": "./index.html",
     "display": "standalone",
