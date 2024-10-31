@@ -6,22 +6,20 @@
     <title>Kalkulator Biaya Produksi</title>
     <link rel="manifest" href="manifest.json">
     <style>
-      body {
+      
+        body {
             font-family: Arial, sans-serif;
-            margin: 0px;
+            margin: 0;
             background-color: #f4f4f4;
         }
-
         .container {
-            padding-top: 100px;
+            padding-top: 150px;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: #f0f2f5;
         }
-
-
         .card {
             background-color: #fff;
             border-radius: 8px;
@@ -32,14 +30,10 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             margin-top: 0px;
         }
-
-        /* Efek hover untuk card */
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
-
-        /* Gaya untuk judul */
         .card h2 {
             background-color: #0080ff;
             color: #ffffff;
@@ -48,29 +42,26 @@
             margin-bottom: 0px;
             text-align: center;
         }
-
-        /* Gaya form */
+        li{
+            background-color: #0080ff;
+            color: #ddd;
+        }
         .form-group {
             display: flex;
             flex-direction: column;
             margin-bottom: 15px;
         }
-
-        /* Label dan input styling */
         label {
             font-weight: bold;
             margin-bottom: 5px;
             color: #333;
         }
-        input[type="number"],
-        input[type="text"] {
+        input[type="number"], input[type="text"] {
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box;
         }
-
-        /* Tombol styling */
         .button-container {
             text-align: left;
             margin-top: 20px;
@@ -88,74 +79,154 @@
         button:hover {
             background-color: #007900;
         }
-
-        /* Hasil TextBox */
         input[readonly] {
             font-size: 20px;
             font-weight: bold;
             background-color: #f1f1f1;
             color: #333;
         }
-        li{
-            background-color: #0080ff;
-            color: #e6e600;
-        }
+        #language-select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#language-select:hover {
+    border-color: #0080ff;
+    background-color: #f0f8ff;
+}
+
+#language-select:focus {
+    outline: none;
+    border-color: #0080ff;
+    box-shadow: 0 0 5px rgba(0, 128, 255, 0.5);
+}
+
     </style>
 </head>
 <body>
+    <!-- Dropdown Bahasa -->
+
+
     <div class="container">
+       
         <div class="card">
-            <h2>Production Cost Calculator</h2>
-            <li>By utility@trpc</li>
+            <h2 id="title">Kalkulator Biaya Produksi</h2>
+            <li id="author">Oleh utility@trpc</li>
+            <br>
+            <label for="language-select">Pilih Bahasa:</label>
+            <select id="language-select" onchange="changeLanguage()">
+                <option value="id">Bahasa Indonesia</option>
+                <option value="en">English</option>
+            </select>
             <br>
             <div class="form-group">
-                <label for="bahanBaku">Biaya Bahan Baku :</label>
+                <label id="label-bahanBaku" for="bahanBaku">Biaya Bahan Baku:</label>
                 <input type="number" id="bahanBaku" placeholder="Rp">
             </div>
             <div class="form-group">
-                <label for="tenagaKerja">Biaya Tenaga Kerja :</label>
+                <label id="label-tenagaKerja" for="tenagaKerja">Biaya Tenaga Kerja:</label>
                 <input type="number" id="tenagaKerja" placeholder="Rp">
             </div>
             <div class="form-group">
-                <label for="kwh">Total Pemakaian Listrik (kWh):</label>
+                <label id="label-kwh" for="kwh">Total Pemakaian Listrik (kWh):</label>
                 <input type="number" id="kwh" placeholder="Masukkan total kWh yang digunakan">
             </div>
             <div class="form-group">
-                <label for="tarifListrik">Tarif Listrik per kWh:</label>
+                <label id="label-tarifListrik" for="tarifListrik">Tarif Listrik per kWh:</label>
                 <input type="number" id="tarifListrik" placeholder="Rp">
             </div>
             <div class="form-group">
-                <label for="overheadLain">Biaya Overhead Lainnya :</label>
+                <label id="label-overheadLain" for="overheadLain">Biaya Overhead Lainnya:</label>
                 <input type="number" id="overheadLain" placeholder="Rp">
             </div>
             <div class="form-group">
-                <label for="jumlahUnit">Jumlah Unit Produksi:</label>
+                <label id="label-jumlahUnit" for="jumlahUnit">Jumlah Unit Produksi:</label>
                 <input type="number" id="jumlahUnit" placeholder="total Qty">
             </div>
             <div class="button-container">
-                <button onclick="hitungBiayaProduksi()">Hitung Biaya Produksi</button>
+                <button onclick="hitungBiayaProduksi()" id="calculate-btn">Hitung Biaya Produksi</button>
             </div>
             <br>
             <div class="form-group">
-                <label for="totalBiayaProduksi">Total Biaya Produksi (Rp):</label>
+                <label id="label-totalBiayaProduksi" for="totalBiayaProduksi">Total Biaya Produksi (Rp):</label>
                 <input type="text" id="totalBiayaProduksi" readonly>
             </div>
             <div class="form-group">
-                <label for="biayaPerUnit">Biaya Produksi per Unit (Rp):</label>
+                <label id="label-biayaPerUnit" for="biayaPerUnit">Biaya Produksi per Unit (Rp):</label>
                 <input type="text" id="biayaPerUnit" readonly>
             </div>
             <div class="form-group">
-                <label for="totalBiayaProduksiUSD">Total Biaya Produksi (USD):</label>
+                <label id="label-totalBiayaProduksiUSD" for="totalBiayaProduksiUSD">Total Biaya Produksi (USD):</label>
                 <input type="text" id="totalBiayaProduksiUSD" readonly>
             </div>
             <div class="form-group">
-                <label for="biayaPerUnitUSD">Biaya Produksi per Unit (USD):</label>
+                <label id="label-biayaPerUnitUSD" for="biayaPerUnitUSD">Biaya Produksi per Unit (USD):</label>
                 <input type="text" id="biayaPerUnitUSD" readonly>
             </div>
         </div>
     </div>
 
     <script>
+        const translations = {
+            id: {
+                title: "Kalkulator Biaya Produksi",
+                author: "Oleh utility@trpc",
+                labelBahanBaku: "Biaya Bahan Baku:",
+                labelTenagaKerja: "Biaya Tenaga Kerja:",
+                labelKwh: "Total Pemakaian Listrik (kWh):",
+                labelTarifListrik: "Tarif Listrik per kWh:",
+                labelOverheadLain: "Biaya Overhead Lainnya:",
+                labelJumlahUnit: "Jumlah Unit Produksi:",
+                calculateBtn: "Hitung Biaya Produksi",
+                labelTotalBiayaProduksi: "Total Biaya Produksi (Rp):",
+                labelBiayaPerUnit: "Biaya Produksi per Unit (Rp):",
+                labelTotalBiayaProduksiUSD: "Total Biaya Produksi (USD):",
+                labelBiayaPerUnitUSD: "Biaya Produksi per Unit (USD):"
+            },
+            en: {
+                title: "Production Cost Calculator",
+                author: "By utility@trpc",
+                labelBahanBaku: "Raw Material Cost:",
+                labelTenagaKerja: "Labor Cost:",
+                labelKwh: "Total Electricity Usage (kWh):",
+                labelTarifListrik: "Electricity Tariff per kWh:",
+                labelOverheadLain: "Other Overhead Costs:",
+                labelJumlahUnit: "Production Units:",
+                calculateBtn: "Calculate Production Cost",
+                labelTotalBiayaProduksi: "Total Production Cost (Rp):",
+                labelBiayaPerUnit: "Production Cost per Unit (Rp):",
+                labelTotalBiayaProduksiUSD: "Total Production Cost (USD):",
+                labelBiayaPerUnitUSD: "Production Cost per Unit (USD):"
+            }
+        };
+
+        function changeLanguage() {
+            const selectedLang = document.getElementById("language-select").value;
+            const lang = translations[selectedLang];
+
+            document.getElementById("title").innerText = lang.title;
+            document.getElementById("author").innerText = lang.author;
+            document.getElementById("label-bahanBaku").innerText = lang.labelBahanBaku;
+            document.getElementById("label-tenagaKerja").innerText = lang.labelTenagaKerja;
+            document.getElementById("label-kwh").innerText = lang.labelKwh;
+            document.getElementById("label-tarifListrik").innerText = lang.labelTarifListrik;
+            document.getElementById("label-overheadLain").innerText = lang.labelOverheadLain;
+            document.getElementById("label-jumlahUnit").innerText = lang.labelJumlahUnit;
+            document.getElementById("calculate-btn").innerText = lang.calculateBtn;
+            document.getElementById("label-totalBiayaProduksi").innerText = lang.labelTotalBiayaProduksi;
+            document.getElementById("label-biayaPerUnit").innerText = lang.labelBiayaPerUnit;
+            document.getElementById("label-totalBiayaProduksiUSD").innerText = lang.labelTotalBiayaProduksiUSD;
+            document.getElementById("label-biayaPerUnitUSD").innerText = lang.labelBiayaPerUnitUSD;
+        }
+
+   
         function hitungBiayaProduksi() {
             // Ambil nilai dari input
             const bahanBaku = parseFloat(document.getElementById("bahanBaku").value) || 0;
